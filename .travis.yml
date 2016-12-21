@@ -1,0 +1,11 @@
+sudo: required
+services:
+  - docker
+
+script:
+  - docker build -t slack-cleanup .
+
+after_success:
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker tag slack-cleanup gustajz/slack-cleanup
+  - docker push gustajz/slack-cleanup:latest
