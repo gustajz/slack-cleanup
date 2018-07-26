@@ -1,12 +1,11 @@
-FROM python:2-alpine
+FROM python:3-alpine
 
-ENV TOKEN=changeit \
-    DAYS=30
+WORKDIR /usr/src/app
 
-ADD https://github.com/egermano/slack-files-delete/archive/master.zip /
-RUN unzip -o master
+COPY requirements.txt ./
 
-CMD cd slack-files-delete-master && \
-    sed -i "/TOKEN.*=/c\TOKEN=\"${TOKEN}\"" main.py && \
-    sed -i "/DAYS.*=/c\DAYS=${DAYS}" main.py && \
-    python main.py
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY slack_delete.py ./
+
+ENTRYPOINT [ "python", "./slack_delete.py" ]
